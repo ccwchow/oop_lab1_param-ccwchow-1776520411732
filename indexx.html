@@ -1,0 +1,99 @@
+/*
+ * Rock Paper Scissors Game in Java
+ * A fun, complete console-based game!
+ * 
+ * How to run:
+ * 1. Save this as RockPaperScissors.java
+ * 2. Compile: javac RockPaperScissors.java
+ * 3. Run:    java RockPaperScissors
+ */
+
+import java.util.Random;
+import java.util.Scanner;
+
+public class RockPaperScissors {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Random random = new Random();
+
+        String[] choices = {"Rock", "Paper", "Scissors"};
+        int playerScore = 0;
+        int computerScore = 0;
+
+        System.out.println("====================================");
+        System.out.println("   ROCK PAPER SCISSORS GAME    ");
+        System.out.println("====================================\n");
+        System.out.println("Best of 5 wins! Type 'exit' anytime to quit.\n");
+
+        while (playerScore < 5 && computerScore < 5) {
+            System.out.println("Your score: " + playerScore + " | Computer score: " + computerScore);
+            System.out.print("Enter your choice (Rock / Paper / Scissors): ");
+            String playerInput = scanner.nextLine().trim().toLowerCase();
+
+            // Allow exit
+            if (playerInput.equals("exit")) {
+                System.out.println("Thanks for playing! ");
+                scanner.close();
+                return;
+            }
+
+            // Validate input
+            if (!playerInput.equals("rock") && !playerInput.equals("paper") && !playerInput.equals("scissors")) {
+                System.out.println(" Invalid choice! Please type Rock, Paper, or Scissors.\n");
+                continue;
+            }
+
+            // Computer's random choice
+            int computerIndex = random.nextInt(3);
+            String computerChoice = choices[computerIndex].toLowerCase();
+
+            System.out.println("You chose: " + capitalize(playerInput));
+            System.out.println("Computer chose: " + capitalize(computerChoice));
+
+            // Determine winner
+            String result = determineWinner(playerInput, computerChoice);
+            System.out.println(result + "\n");
+
+            if (result.contains("You win")) {
+                playerScore++;
+            } else if (result.contains("Computer wins")) {
+                computerScore++;
+            }
+            // Tie does nothing
+        }
+
+        // Final result
+        System.out.println("====================================");
+        if (playerScore == 5) {
+            System.out.println(" YOU WIN THE GAME! ");
+        } else {
+            System.out.println("COMPUTER WINS THE GAME! ");
+        }
+        System.out.println("Final Score - You: " + playerScore + " | Computer: " + computerScore);
+        System.out.println("====================================");
+
+        scanner.close();
+    }
+
+    // Helper method to determine winner
+    private static String determineWinner(String player, String computer) {
+        if (player.equals(computer)) {
+            return " It's a TIE!";
+        }
+
+        if ((player.equals("rock") && computer.equals("scissors")) ||
+            (player.equals("scissors") && computer.equals("paper")) ||
+            (player.equals("paper") && computer.equals("rock"))) {
+            return "You win this round!";
+        } else {
+            return " Computer wins this round!";
+        }
+    }
+
+    // Helper to capitalize first letter
+    private static String capitalize(String str) {
+        if (str == null || str.isEmpty()) return str;
+        return str.substring(0, 1).toUpperCase() + str.substring(1);
+    }
+}
